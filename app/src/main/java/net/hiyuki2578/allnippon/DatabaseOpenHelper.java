@@ -1,4 +1,4 @@
-package jp.android_group.student.ticketsplit;
+package net.hiyuki2578.allnippon;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,13 +11,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Created by hiyuki on 2017/02/09.
+ * Created by hiyuki on 2017/02/13.
  */
 
-class DatabaseOpenHelper extends SQLiteOpenHelper {
+public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	//private static final long serialVersionUID = 1L;
-	private static final String DB_FILE_NAME = "station.db";
-	private static final String DB_NAME = "Stations.db";
+	private static final String DB_FILE_NAME = "airport.db";
+	private static final String DB_NAME = "Airport.db";
 	private static final int DB_VERSION = 1;
 	private Context context;
 	private File dbPath;

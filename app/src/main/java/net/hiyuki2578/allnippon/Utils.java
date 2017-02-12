@@ -1,4 +1,4 @@
-package jp.android_group.student.ticketsplit;
+package net.hiyuki2578.allnippon;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -20,6 +20,9 @@ import java.util.regex.Pattern;
  */
 
 class Utils {
+	static String htmlTagRemover(String str) {
+		return str.replaceAll("<.+?>", "");
+	}
 	static String regex(String str, String regex){
 		Pattern pattern = Pattern.compile(regex);	//検索文字列のセット
 		Matcher matcher = pattern.matcher(str);		//変換前文字列設定
@@ -32,22 +35,14 @@ class Utils {
 		return format.format(date);		//Stringでリターン
 	}
 
-	static String getCheck(CheckBox chk){
-		if(chk.isChecked()){	//ここはコメントなくても理解して
-			return "true";
-		}else{
-			return "false";
-		}
-	}
-
-	private static String[] getDb(Context context, String ans_name, String query, int Like){
+	private static String[] getDb(Context context, String ans_name, String query){//, int Name){
 		DatabaseOpenHelper helper = new DatabaseOpenHelper(context);
 		SQLiteDatabase database = helper.getWritableDatabase();
-		Cursor c = database.rawQuery("SELECT " + ans_name + " FROM Station WHERE Station.Name = '" + query + "'", null);
-		if(Like == 1) {
-			c.close();
-			c = database.rawQuery("SELECT " + ans_name + " FROM Station WHERE Station.Name Like '" + query + "%'", null);
-		}
+		Cursor c = database.rawQuery("SELECT " + ans_name + " FROM Airport WHERE Airport.IATA Like '" + query + "'", null);
+		//if(Name == 1) {
+			//c.close();
+			//c = database.rawQuery("SELECT " + ans_name + " FROM Station WHERE Airport.IATA = '" + query + "%'", null);
+		//}
 		c.moveToFirst();
 		String[] list = new String[c.getCount()];
 		for(int i = 0; i < list.length ; i++){
@@ -55,6 +50,7 @@ class Utils {
 			c.moveToNext();
 		}
 		c.close();
+		helper.close();
 		return list;
 	}
 
@@ -62,24 +58,19 @@ class Utils {
 		InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);	//IM取得
 		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);	//IMを隠す
 	}
-
-	static void NoFocus(Context context, View view, boolean Focus, AutoCompleteTextView Ac){
-		if(!Focus){				//フォーカスが外れたとき
-			hideIME(context, view);
-		}else{
-			if(Ac.getText().length() != 0) {
-				Ac.showDropDown();
-			}
-		}
-	}
-
-	static void AutoComp(Context context, String str, AutoCompleteTextView Ac){
+	static void CompANA(Context context, String str, AutoCompleteTextView Ac){
 		if(str.length() != 0) {
-			String[] sta = getDb(context, "Name", str, 1);
+			String[] sta = getDb(context, "IATA", str);
 			ArrayAdapter<String> adapter = new ArrayAdapter<>(context, R.layout.list_item, sta);
 			Ac.setAdapter(adapter);
 			Ac.showDropDown();
 		}
 	}
-
+	static String getName(Context context, String str){
+		if(str.length() != 0) {
+			String[] sta = getDb(context, "NAME", str);
+			return sta[0];
+		}
+		return str;
+	}
 }

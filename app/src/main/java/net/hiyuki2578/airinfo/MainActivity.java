@@ -1,4 +1,4 @@
-package net.hiyuki2578.allnippon;
+package net.hiyuki2578.airinfo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,13 +9,14 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
 
@@ -24,9 +25,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
-import java.util.regex.Pattern;
 
-import static net.hiyuki2578.allnippon.Utils.*;
+import static net.hiyuki2578.airinfo.Utils.*;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, android.app.DatePickerDialog.OnDateSetListener {
 
@@ -97,19 +97,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		final AutoCompleteTextView Dep = (AutoCompleteTextView)findViewById(R.id.Dep);
 		final AutoCompleteTextView Arr = (AutoCompleteTextView)findViewById(R.id.Arr);
 		final TextView result = (TextView)findViewById(R.id.result);
+		RadioButton SFJ = (RadioButton)findViewById(R.id.SFJ);
 		Button Day = (Button)findViewById(R.id.Day);
-		//final TextView result = (TextView)findViewById(R.id.result);
-		mRequestQueue.add(new StringRequest(Request.Method.GET, getUri.getANA(regex(Day.getText().toString(), "/"), Dep.getText().toString().toUpperCase(), Arr.getText().toString().toUpperCase()), new Response.Listener<String>() {
+		String uri = getUri.getANA(regex(Day.getText().toString(), "/"), Dep.getText().toString().toUpperCase(), Arr.getText().toString().toUpperCase());
+		if(SFJ.isChecked()){
+			uri = getUri.getSFJ(regex(Day.getText().toString(), "/"), Dep.getText().toString().toUpperCase(), Arr.getText().toString().toUpperCase());
+		}
+		mRequestQueue.add(new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
 			@Override
-			public void onResponse(String response){
-				response = response.replaceFirst(Pattern.quote("FlightStatus("),"");
-				response = response.replaceFirst(Pattern.quote(")}"),"}");
+			public void onResponse(JSONObject response){
 				try{
 					String text = "出発地 " + getName(MainActivity.this, Dep.getText().toString()) + " 目的地 " +getName(MainActivity.this, Arr.getText().toString()) + "\n";
-					JSONObject ANA = new JSONObject(response);
-					JSONObject Data_ = ANA.getJSONObject("data");
-					JSONObject SearchAirport = Data_.getJSONObject("SearchAirport");
-					JSONObject Data = SearchAirport.getJSONObject("data");
+					JSONObject Data = response.getJSONObject("data");
 					JSONArray fsList = Data.getJSONArray("fsList");
 					for(int i = 0;i < fsList.length();i++){
 						JSONObject fs = fsList.getJSONObject(i);

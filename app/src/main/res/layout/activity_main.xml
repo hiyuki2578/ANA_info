@@ -9,7 +9,7 @@
 	android:paddingLeft="@dimen/activity_horizontal_margin"
 	android:paddingRight="@dimen/activity_horizontal_margin"
 	android:paddingTop="@dimen/activity_vertical_margin"
-	tools:context="net.hiyuki2578.allnippon.MainActivity">
+	tools:context="net.hiyuki2578.airinfo.MainActivity">
 
 	<AutoCompleteTextView
 		android:text=""
@@ -54,9 +54,9 @@
 		android:layout_height="match_parent"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentEnd="true"
-		android:layout_below="@+id/button"
 		android:id="@+id/scrollView2"
-		android:layout_alignParentStart="true">
+		android:layout_alignParentStart="true"
+		android:layout_below="@+id/radioGroup">
 
 		<TextView
 			android:layout_width="match_parent"
@@ -75,12 +75,35 @@
 		android:layout_below="@+id/Arr"
 		android:layout_alignStart="@+id/Arr"/>
 
+	<RadioGroup
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/Arr"
+		android:id="@+id/radioGroup"
+		android:layout_toEndOf="@+id/button">
+
+		<RadioButton
+			android:text="ANA(NH)"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/ANA"
+			android:layout_weight="1"/>
+
+		<RadioButton
+			android:text="StarFlyer(7G)"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/SFJ"
+			android:layout_weight="1"/>
+	</RadioGroup>
+
 	<Button
 		android:text="Button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/Day"
-		android:layout_above="@+id/scrollView2"
+		android:layout_alignBaseline="@+id/button"
+		android:layout_alignBottom="@+id/button"
 		android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

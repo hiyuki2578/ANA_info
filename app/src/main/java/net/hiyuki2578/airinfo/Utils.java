@@ -1,4 +1,4 @@
-package net.hiyuki2578.allnippon;
+package net.hiyuki2578.airinfo;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -1,4 +1,4 @@
-package net.hiyuki2578.allnippon;
+package net.hiyuki2578.airinfo;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
